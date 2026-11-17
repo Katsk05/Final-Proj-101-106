@@ -1,4 +1,4 @@
-﻿using FOP_Final_Project__BSIT_101___106_.Class;
+using FOP_Final_Project__BSIT_101___106_.Class;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,13 +15,13 @@ namespace FOP_Final_Project__BSIT_101___106_
             List<User> usersList = new List<User>();
 
             DisplayInitialUsers(usersList);
-            
+
             var choicesMessage = "Please select a user to login:" +
                                 "\n1 Admin" +
                                 "\n2 Warehouse" +
                                 "\n3 User" +
                                 "\n0 Exit";
-         
+
             var running = true;
             while (running)
             {
@@ -40,12 +40,12 @@ namespace FOP_Final_Project__BSIT_101___106_
                     case 2:
                         loggedIn = Login(2, usersList);
                         //if (loggedIn != null)
-                            //WarehouseOptions(usersList);            placeholder lang mga yan for warehouse pati user methofs
+                        //WarehouseOptions(usersList);            placeholder lang mga yan for warehouse/user methodss
                         break;
                     case 3:
                         loggedIn = Login(3, usersList);
                         //if (loggedIn != null)
-                            //UserOptions(usersList);
+                        //UserOptions(usersList);
                         break;
                     case 0:
                         running = false;
@@ -60,7 +60,7 @@ namespace FOP_Final_Project__BSIT_101___106_
             usersList.Add(new User("Bumatay_Admin", "123", "Admin", true));
             usersList.Add(new User("Deocampo_Warehouse", "123", "Warehouse", true));  //true = active, false = inactive
             usersList.Add(new User("Malayo_Warehouse", "123", "Warehouse", false));
-            usersList.Add(new User("Medrano_User", "123", "User", false)); 
+            usersList.Add(new User("Medrano_User", "123", "User", false));
         }
 
         public static string DisplayRoleName(int role)
@@ -80,7 +80,7 @@ namespace FOP_Final_Project__BSIT_101___106_
             }
             return name;
         }
-        public static User Login (int role, List<User> usersList) 
+        public static User Login(int role, List<User> usersList)
         {
             for (int attempts = 1; attempts <= 3; attempts++)
             {
@@ -121,40 +121,41 @@ namespace FOP_Final_Project__BSIT_101___106_
         public static void AdminOptions(List<User> usersList)
         {
             var options = "Please select an option:" +
-                          "\n1. Update Password " +
-                          "\n2. De-activate User" +
-                          "\n3. Add Users" + //partially done
-                          "\n4. Display All Users" + //partially done
-                          "\n5. Display Inactive Users" +
-                          "\n6. Display Active Users" +
-                          "\n7. Display Products" +
-                          "\n8. Display Orders" +
+                          "\n1. Update Password " + //done but check for bugs
+                          "\n2. De-activate User" + //done but check for bugs
+                          "\n3. Add Users" + //incomplete sa validation (user already exists)
+                          "\n4. Display All Users" + //done but check for bugs
+                          "\n5. Display Inactive Users" + // have bug
+                          "\n6. Display Active Users" + //done check bugs
+                          "\n7. Display Products" + //wait fro warehouse and user role
+                          "\n8. Display Orders" + //wait for user role
                           "\n9. Logout"; //done
 
             int option;
             do
             {
-                Console.WriteLine(options);
+                Console.Write($"{options} \n\nEnter your choice: ");
                 option = Convert.ToInt32(Console.ReadLine());
 
                 switch (option)
                 {
                     case 1:
-                        //UpdatePassword(); 
-                        break;
-                        //De-activate User
+                        UpdatePassword(usersList);
+                        break;                  
                     case 2:
+                        DeactivateUser(usersList); //test & check
                         break;
-                    case 3: AddUsers(usersList); //incomplete sa validation
+                    case 3:
+                        AddUsers(usersList); //test
                         break;
                     case 4:
                         DisplayAllUsers(usersList); //complete pero check parin validations 
                         break;
                     case 5:
-                        //DisplayInactiveUsers();
+                        ShowInactiveUsers(usersList);
                         break;
                     case 6:
-                        //DisplayActiveUsers();
+                        ShowActiveUsers(usersList);
                         break;
                     case 7:
                         //DisplayProducts();
@@ -168,16 +169,57 @@ namespace FOP_Final_Project__BSIT_101___106_
                 }
             } while (option != 9);
         }
-        
-        public static void UpdatePassword()
+
+        public static void UpdatePassword(List<User> usersList)
         {
-        //Not done
+            Console.Write("\nEnter the username of the account you want to update: ");
+            string username = Console.ReadLine();
+
+            User target = null;
+            foreach (var user in usersList)
+            {
+                if (user.Username == username)
+                {
+                    target = user;
+                    break;
+                }
+            }
+            if (target == null)
+            {
+                Console.WriteLine("User not found.");
+
+            }
+
+            Console.Write("Enter the new password: ");
+            string newPassword = Console.ReadLine();
+
+            if (string.IsNullOrWhiteSpace(newPassword))
+            {
+                Console.WriteLine("\nPassword cannot be empty.\n");
+                return;
+            }
+            if (newPassword == target.Password)
+            {
+                Console.WriteLine("\nNew password cannot be the same as the old password.");
+                return;
+            }
+            Console.Write("Confirm the new password: ");
+            string confirmPassword = Console.ReadLine();
+
+            if (newPassword != confirmPassword)
+            {
+                Console.WriteLine("\nPasswords do not match. Password not updated. \n");
+                return;
+            }
+            target.Password = newPassword;
+            Console.WriteLine($"\nPassword for {target.Username} updated successfully. \n");
+
         }
-        public static void DisplayAllUsers (List<User> usersList) 
+        public static void DisplayAllUsers(List<User> usersList)
         {
             if (usersList.Count == 0)
             {
-                Console.WriteLine("\nNo users found"); 
+                Console.WriteLine("\nNo users found");
             }
             if (usersList.Count > 0)
             {
@@ -186,33 +228,120 @@ namespace FOP_Final_Project__BSIT_101___106_
                 {
                     Console.WriteLine($"Username: {user.Username}");
                     Console.WriteLine($"Role: {user.Role}");
-                    Console.WriteLine($"Status: { (user.IsActive ? "Active" : "Inactive") }");
+                    Console.WriteLine($"Status: {(user.IsActive ? "Active" : "Inactive")}");
 
                     Console.WriteLine();
-                    }
                 }
             }
+        }
 
         public static void AddUsers(List<User> usersList) //may kulang pa ex: "user already exists"
         {
-            Console.Write("Please enter your username: ");
+
+            Console.Write("\nPlease enter your username: ");
             string username = Console.ReadLine();
 
+            foreach (var user in usersList)
+            {
+                if (user.Username == username)
+                {
+                    Console.WriteLine("Account already exists. Please create a different account.\n");
+                    return;
+                }
+            }
             Console.Write("Please enter your password: ");
             string password = Console.ReadLine();
             usersList.Add(new User(username, password, "User", true));
 
-            Console.WriteLine("\nUser added successfully!");
+            Console.WriteLine("Please select a role for the new user: " +
+                              "\n1. Admin" +
+                              "\n2. Warehouse" +
+                              "\n3. User");
+            int role;
+            Console.Write("Enter the selected role: ");
 
-            Console.WriteLine(); 
+            if (!int.TryParse(Console.ReadLine(), out role) || role < 1 || role > 3)
+            {
+                Console.WriteLine("\nInvalid account type. User not added.\n");
+                return;
+            }
+
+            string roleName = DisplayRoleName(role);
+            usersList.Add(new User(username, password, roleName, true));
+
+            Console.WriteLine($"\n{roleName} account added successfully!\n");
+
+            Console.WriteLine();
         }
-
-        public static void ActiveUsers() 
+        public static void DeactivateUser(List<User> usersList)
         {
-            //not
-            //
+            Console.Write("\nEnter the username of the account you want to deactivate: ");
+            string username = Console.ReadLine();
+            User target = null;
+            foreach (var user in usersList)
+            {
+                if (user.Username == username)
+                {
+                    target = user;
+                    break;
+                }
+            }
+            if (target == null)
+            {
+                Console.WriteLine("User not found.");
+                return;
+            }
+            if (!target.IsActive)
+            {
+                Console.WriteLine("User is already inactive.");
+                return;
+            }
+            if (target.Role == "Admin")
+            {
+                Console.WriteLine("Cannot deactivate an Admin user.");
+                return;
+            }
+            target.IsActive = false;
+            Console.WriteLine($"User {target.Username} has been deactivated successfully.");
+        }
+        public static void ShowActiveUsers(List<User> usersList)
+        {
+            Console.WriteLine("\nList of Active Users");
 
+            int count = 0;
+            foreach (var user in usersList)
+            {
+                if (user.IsActive)
+                {
+                    count++;
+                    Console.WriteLine($"Username: {user.Username}");
+                    Console.WriteLine($"Role: {user.Role}");
+                    Console.WriteLine($"Status: {(user.IsActive ? "Active" : "Inactive")}");
+                    Console.WriteLine();
+                }
+                if (count == 0)
+                {
+                    Console.WriteLine("No active users found.");
+                }
+            }
+        }
+        public static void ShowInactiveUsers(List<User> usersList)
+        {
+            Console.WriteLine("\nList of Inactive Users");
+
+            int count = 0;
+            foreach (var user in usersList.Where(u => !u.IsActive))
+            {
+                count++;
+                Console.WriteLine($"Username: {user.Username}");
+                Console.WriteLine($"Role: {user.Role}");
+                Console.WriteLine($"Status: {(user.IsActive ? "Active" : "Inactive")}");
+                Console.WriteLine();
+            }
+            if (count == 0)
+            {
+                Console.WriteLine("No inactive users found.");
+            }
         }
     }
 }
-
