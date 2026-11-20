@@ -1,0 +1,7 @@
+C:\Users\Kat\source\repos\FOP Final Project (BSIT 101 & 101)\bin\Debug\FOP Final Project (BSIT 101 & 101).exe.config
+C:\Users\Kat\source\repos\FOP Final Project (BSIT 101 & 101)\bin\Debug\FOP Final Project (BSIT 101 & 101).exe
+C:\Users\Kat\source\repos\FOP Final Project (BSIT 101 & 101)\bin\Debug\FOP Final Project (BSIT 101 & 101).pdb
+C:\Users\Kat\source\repos\FOP Final Project (BSIT 101 & 101)\obj\Debug\FOP Final Project (BSIT 101 & 106).csproj.AssemblyReference.cache
+C:\Users\Kat\source\repos\FOP Final Project (BSIT 101 & 101)\obj\Debug\FOP Final Project (BSIT 101 & 106).csproj.CoreCompileInputs.cache
+C:\Users\Kat\source\repos\FOP Final Project (BSIT 101 & 101)\obj\Debug\FOP Final Project (BSIT 101 & 101).exe
+C:\Users\Kat\source\repos\FOP Final Project (BSIT 101 & 101)\obj\Debug\FOP Final Project (BSIT 101 & 101).pdb
